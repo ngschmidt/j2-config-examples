@@ -125,32 +125,32 @@ router isis {{ isis.instancename }}
 !
 router bgp {{ bgp.localasn }}
  bgp log-neighbor-changes
- neighbor {{ ip.spine.one }} remote-as {{ bgp.localasn }}
- neighbor {{ ip.spine.one }} update-source Loopback0
- neighbor {{ ip.spine.two }} remote-as {{ bgp.localasn }}
- neighbor {{ ip.spine.two }} update-source Loopback0
- neighbor {{ ipv6.spine.one }} remote-as {{ bgp.localasn }}
- neighbor {{ ipv6.spine.one }} update-source Loopback0
- neighbor {{ ipv6.spine.two }} remote-as {{ bgp.localasn }}
- neighbor {{ ipv6.spine.two }} update-source Loopback0
+ neighbor {{ ip.prefix }}.0.{{ spine.one }} remote-as {{ bgp.localasn }}
+ neighbor {{ ip.prefix }}.0.{{ spine.one }} update-source Loopback0
+ neighbor {{ ip.prefix }}.0.{{ spine.two }} remote-as {{ bgp.localasn }}
+ neighbor {{ ip.prefix }}.0.{{ spine.two }} update-source Loopback0
+ neighbor {{ ipv6.prefix }}::{{ spine.one }} remote-as {{ bgp.localasn }}
+ neighbor {{ ipv6.prefix }}::{{ spine.one }} update-source Loopback0
+ neighbor {{ ipv6.prefix }}::{{ spine.two }} remote-as {{ bgp.localasn }}
+ neighbor {{ ipv6.prefix }}::{{ spine.two }} update-source Loopback0
  maximum-paths 2
  !
  address-family ipv4
-  neighbor {{ ip.spine.one }} activate
-  neighbor {{ ip.spine.two }} activate
-  neighbor {{ ipv6.spine.one }} activate
-  neighbor {{ ipv6.spine.two }} activate
+  neighbor {{ ip.prefix }}.0.{{ spine.one }} activate
+  neighbor {{ ip.prefix }}.0.{{ spine.two }} activate
+  neighbor {{ ipv6.prefix }}::{{ spine.one }} activate
+  neighbor {{ ipv6.prefix }}::{{ spine.two }} activate
   maximum-paths 2
   no auto-summary
   no synchronization
-  network {{ ip.spine.one }} mask 255.255.255.240
+  network {{ ip.prefix }}.0.{{ spine.one }} mask 255.255.255.240
 
  exit-address-family
  !
  address-family ipv6
-  neighbor {{ ipv6.spine.one }} activate
-  neighbor {{ ipv6.spine.two }} activate
-  network {{ ipv6.spine.one }}/124
+  neighbor {{ ipv6.prefix }}::{{ spine.one }} activate
+  neighbor {{ ipv6.prefix }}::{{ spine.two }} activate
+  network {{ ipv6.prefix }}::{{ spine.one }}/124
   maximum-paths 2
  exit-address-family
 !
