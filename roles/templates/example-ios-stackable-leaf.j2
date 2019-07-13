@@ -46,7 +46,7 @@ errdisable recovery cause small-frame
 !
 interface Loopback0
  ip address {{ ip.prefix }}.0.{{ global.switchid }} 255.255.255.255
- ip router isis {{ isis.instance-name }}
+ ip router isis {{ isis.instancename }}
  ipv6 address {{ ipv6.prefix }}::{{ global.switchid }}/128
  ipv6 ospf 1 area 0
 !
@@ -93,7 +93,7 @@ interface FastEthernet1/0/20
 interface FastEthernet1/0/21
  no switchport
  ip address {{ ip.prefix }}.{{ spine.two }}.{{ ip.uplink }} 255.255.255.254
- ip router isis {{ isis.instance-name }}
+ ip router isis {{ isis.instancename }}
  ipv6 address {{ ipv6.prefix }}:{{ spine.two }}::{{ ipv6.uplink }}/126
  ipv6 enable
  ipv6 ospf 1 area 0
@@ -105,7 +105,7 @@ interface FastEthernet1/0/23
 interface FastEthernet1/0/24
  no switchport
  ip address {{ ip.prefix }}.{{ spine.one }}.{{ ip.uplink }} 255.255.255.254
- ip router isis {{ isis.instance-name }}
+ ip router isis {{ isis.instancename }}
  ipv6 address {{ ipv6.prefix }}:{{ spine.two }}::{{ ipv6.uplink }}/126
  ipv6 enable
  ipv6 ospf 1 area 0
@@ -117,21 +117,21 @@ interface GigabitEthernet1/0/2
 interface Vlan1
  no ip address
 !
-router isis {{ isis.instance-name }}
+router isis {{ isis.instancename }}
  net {{ isis.net }}
  is-type level-2-only
  ispf level-2
  log-adjacency-changes
 !
-router bgp {{ bgp.local-asn }}
+router bgp {{ bgp.localasn }}
  bgp log-neighbor-changes
- neighbor {{ ip.spine.one }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ip.spine.one }} remote-as {{ bgp.localasn }}
  neighbor {{ ip.spine.one }} update-source Loopback0
- neighbor {{ ip.spine.two }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ip.spine.two }} remote-as {{ bgp.localasn }}
  neighbor {{ ip.spine.two }} update-source Loopback0
- neighbor {{ ipv6.spine.one }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ipv6.spine.one }} remote-as {{ bgp.localasn }}
  neighbor {{ ipv6.spine.one }} update-source Loopback0
- neighbor {{ ipv6.spine.two }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ipv6.spine.two }} remote-as {{ bgp.localasn }}
  neighbor {{ ipv6.spine.two }} update-source Loopback0
  maximum-paths 2
  !

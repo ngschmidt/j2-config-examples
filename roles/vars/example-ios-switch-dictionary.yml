@@ -13,8 +13,8 @@ spine:
   two: 241
 isis: 
   net: 42.0000.0000.0000.0000.00
-  instance-name: CLOS-1
+  instancename: CLOS-1
 bgp:
-  local-asn:
-  peer-one-asn:
-  firewall-asn:
+  localasn:
+  peeroneasn:
+  firewallasn:
