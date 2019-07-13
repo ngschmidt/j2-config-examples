@@ -3,7 +3,7 @@
   tasks:
     - name: Import Vars...
       include_vars:
-        file: vars/example-ios-switch-dictionary.yml
+        file: example-ios-switch-dictionary.yml
     - name: Combine IOS Stackable Leaf...
       template: 
         src: templates/example-ios-stackable-leaf.j2
