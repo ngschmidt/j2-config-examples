@@ -1,0 +1,20 @@
+---
+global:
+  hostname: ios-leaf
+  switchid: 0
+ip:
+  prefix: 10.6
+  uplink: 1
+ipv6: 
+  prefix: FD00:6
+  uplink: 2
+spine:
+  one: 240
+  two: 241
+isis: 
+  net: 42.0000.0000.0000.0000.00
+  instance-name: CLOS-1
+bgp:
+  local-asn:
+  peer-one-asn:
+  firewall-asn:

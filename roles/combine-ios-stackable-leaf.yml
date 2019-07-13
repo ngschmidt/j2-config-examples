@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Import Vars...
+      include_vars:
+        file: vars/example-ios-switch-dictionary.yml
+    - name: Combine IOS Stackable Leaf...
+      template: 
+        src: templates/example-ios-stackable-leaf.j2
+        dest: example-ios-stackable-leaf.conf

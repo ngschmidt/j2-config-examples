@@ -1,0 +1,177 @@
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname {{ global.hostname }}-{{ global.switchid }}
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+ipv6 unicast-routing
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree logging
+spanning-tree portfast default
+spanning-tree portfast bpduguard default
+spanning-tree extend system-id
+spanning-tree uplinkfast
+spanning-tree backbonefast
+spanning-tree pathcost method long
+spanning-tree vlan 1-4094 priority 8192
+!
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+errdisable recovery cause security-violation
+errdisable recovery cause channel-misconfig (STP)
+errdisable recovery cause pagp-flap
+errdisable recovery cause dtp-flap
+errdisable recovery cause link-flap
+errdisable recovery cause sfp-config-mismatch
+errdisable recovery cause gbic-invalid
+errdisable recovery cause l2ptguard
+errdisable recovery cause psecure-violation
+errdisable recovery cause port-mode-failure
+errdisable recovery cause dhcp-rate-limit
+errdisable recovery cause pppoe-ia-rate-limit
+errdisable recovery cause mac-limit
+errdisable recovery cause vmps
+errdisable recovery cause storm-control
+errdisable recovery cause inline-power
+errdisable recovery cause arp-inspection
+errdisable recovery cause loopback
+errdisable recovery cause small-frame
+!
+interface Loopback0
+ ip address {{ ip.prefix }}.0.{{ global.switchid }} 255.255.255.255
+ ip router isis {{ isis.instance-name }}
+ ipv6 address {{ ipv6.prefix }}::{{ global.switchid }}/128
+ ipv6 ospf 1 area 0
+!
+interface FastEthernet1/0/1
+!
+interface FastEthernet1/0/2
+!
+interface FastEthernet1/0/3
+!
+interface FastEthernet1/0/4
+!
+interface FastEthernet1/0/5
+!
+interface FastEthernet1/0/6
+!
+interface FastEthernet1/0/7
+!
+interface FastEthernet1/0/8
+!
+interface FastEthernet1/0/9
+!
+interface FastEthernet1/0/10
+!
+interface FastEthernet1/0/11
+!
+interface FastEthernet1/0/12
+!
+interface FastEthernet1/0/13
+!
+interface FastEthernet1/0/14
+!
+interface FastEthernet1/0/15
+!
+interface FastEthernet1/0/16
+!
+interface FastEthernet1/0/17
+!
+interface FastEthernet1/0/18
+!
+interface FastEthernet1/0/19
+!
+interface FastEthernet1/0/20
+!
+interface FastEthernet1/0/21
+ no switchport
+ ip address {{ ip.prefix }}.{{ spine.two }}.{{ ip.uplink }} 255.255.255.254
+ ip router isis {{ isis.instance-name }}
+ ipv6 address {{ ipv6.prefix }}:{{ spine.two }}::{{ ipv6.uplink }}/126
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface FastEthernet1/0/22
+!
+interface FastEthernet1/0/23
+!
+interface FastEthernet1/0/24
+ no switchport
+ ip address {{ ip.prefix }}.{{ spine.one }}.{{ ip.uplink }} 255.255.255.254
+ ip router isis {{ isis.instance-name }}
+ ipv6 address {{ ipv6.prefix }}:{{ spine.two }}::{{ ipv6.uplink }}/126
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet1/0/1
+!
+interface GigabitEthernet1/0/2
+!
+interface Vlan1
+ no ip address
+!
+router isis {{ isis.instance-name }}
+ net {{ isis.net }}
+ is-type level-2-only
+ ispf level-2
+ log-adjacency-changes
+!
+router bgp {{ bgp.local-asn }}
+ bgp log-neighbor-changes
+ neighbor {{ ip.spine.one }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ip.spine.one }} update-source Loopback0
+ neighbor {{ ip.spine.two }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ip.spine.two }} update-source Loopback0
+ neighbor {{ ipv6.spine.one }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ipv6.spine.one }} update-source Loopback0
+ neighbor {{ ipv6.spine.two }} remote-as {{ bgp.local-asn }}
+ neighbor {{ ipv6.spine.two }} update-source Loopback0
+ maximum-paths 2
+ !
+ address-family ipv4
+  neighbor {{ ip.spine.one }} activate
+  neighbor {{ ip.spine.two }} activate
+  neighbor {{ ipv6.spine.one }} activate
+  neighbor {{ ipv6.spine.two }} activate
+  maximum-paths 2
+  no auto-summary
+  no synchronization
+  network {{ ip.spine.one }} mask 255.255.255.240
+
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor {{ ipv6.spine.one }} activate
+  neighbor {{ ipv6.spine.two }} activate
+  network {{ ipv6.spine.one }}/124
+  maximum-paths 2
+ exit-address-family
+!
+ip classless
+no ip http server
+no ip http secure-server
+!
+!
+ipv6 router ospf 1
+ router-id {{ ip.prefix }}.0.{{ global.switchid }}
+ log-adjacency-changes
+ maximum-paths 4
+!
+!
+!
+!
+no vstack
+!
+line con 0
+line vty 0 4
+ no login
+line vty 5 15
+ no login
+!
